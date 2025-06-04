@@ -4,7 +4,7 @@ build:
 run:
 	go run main.go
 
-image-build:
+build-image:
 	docker build -t registry.k8s.io/memtest:test .
 
 setup-env:
@@ -12,5 +12,3 @@ setup-env:
 
 teardown-env:
 	./env/teardown_env.sh
-
-
