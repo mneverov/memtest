@@ -8,5 +8,10 @@ spec:
   containers:
   - name: memtest
     image: registry.k8s.io/memtest:test
+    resources:
+      requests:
+        memory: "500Mi"
+      limits:
+        memory: "1Gi"
   nodeSelector:
     role: worker
