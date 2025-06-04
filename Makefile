@@ -1,5 +1,5 @@
 build:
-	go build -o memtest .
+	go build -o bin/memtest .
 
 run:
 	go run main.go
