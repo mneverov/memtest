@@ -2,40 +2,59 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"runtime"
 	"runtime/debug"
+	"strings"
+	"time"
 )
 
-var data []byte
+const (
+	GB = 1_000_000_000
+	MB = 1_000_000
+)
+
+var data [][]byte
 
 func main() {
 	memLimit()
 }
 
-const l00_MB = 100_000_000
-const GB = 1_000_000_000
+func memLimit() {
+	// no difference with or without memory limit
+	debug.SetMemoryLimit(GB)
+	garbage()
+}
 
 // garbage allocates some.
-// go build -o mymem .
-// ps -eo pid,cmd | grep mymem | awk 'NR==1 {print $1}' | xargs pmap | grep total
-// GOGC=off mymem
+// Run the app and print RSS of a process in MB.
+// "RSS: resident set size, the non-swapped physical memory that a task has used"
+// ps -eo pid,cmd | grep memtest | awk 'NR==1 {print $1}' | xargs pmap -x | grep total | awk '{print "total: " int($3/1024) "MB; RSS: " int($4/1024) "MB; dirty: " int($5/1024) "MB"}'
 func garbage() {
 	for i := range 20000001 {
-		data = make([]byte, l00_MB)
-		data[0] = 1
-		if i%20 == 0 {
+		data = make([][]byte, 1024)
+		for k := range 1024 {
+			go func() {
+				addRandomString(data, k)
+				time.Sleep(10 * time.Millisecond)
+			}()
+		}
+
+		if i%50 == 0 {
 			var m runtime.MemStats
 			runtime.ReadMemStats(&m)
 
-			//debug.FreeOSMemory()
+			// todo(mneverov): test with debug.FreeOSMemory()?
 
-			fmt.Printf("%dGB(total) - %dGB(released) = %dGB\n",
-				m.TotalAlloc/GB, m.HeapReleased/GB, (m.TotalAlloc-m.HeapReleased)/GB)
+			fmt.Printf(
+				"%dGB total; heap: %fMB; released %dMB\n", m.TotalAlloc/GB, float64(m.HeapAlloc)/MB, m.HeapReleased/MB,
+			)
 		}
 	}
 }
 
-func memLimit() {
-	debug.SetMemoryLimit(GB)
-	garbage()
+func addRandomString(data [][]byte, i int) {
+	rf := rand.Float64()
+	s := strings.Repeat(fmt.Sprintf("%f", rf), 2048)
+	data[i] = []byte(s)
 }
