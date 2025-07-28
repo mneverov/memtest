@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: memtest-metrics-monitor
+  namespace: monitoring
+spec:
+  podMetricsEndpoints:
+  #  - portNumber: 6060
+  - port: metrics
+  relabelings:
+  - targetLabel: job
+    replacement: memtest-metrics-monitor
+  - targetLabel: instance
+    sourceLabels: [pod]
+  - action: labelkeep
+    regex: (job|instance|__.*)
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: memtest

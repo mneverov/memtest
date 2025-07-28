@@ -13,5 +13,8 @@ spec:
         memory: "500Mi"
       limits:
         memory: "1Gi"
+    ports:
+    - name: metrics
+      containerPort: 6060
   nodeSelector:
     role: worker

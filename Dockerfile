@@ -9,7 +9,7 @@ COPY main.go main.go
 
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -a -o memtest main.go
 
-FROM scratch
+FROM alpine
 WORKDIR /
 COPY --from=builder /build/src/memtest /usr/bin/memtest
 

@@ -2,7 +2,10 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"math/rand"
+	"net/http"
+	_ "net/http/pprof"
 	"runtime"
 	"runtime/debug"
 	"strings"
@@ -17,6 +20,9 @@ const (
 var data [][]byte
 
 func main() {
+	go func() {
+		log.Println(http.ListenAndServe("localhost:6060", nil))
+	}()
 	memLimit()
 }
 
