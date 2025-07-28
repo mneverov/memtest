@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: memtest
+  labels:
+    app.kubernetes.io/name: memtest
+spec:
+  containers:
+  - name: memtest
+    image: registry.k8s.io/memtest:test
+    resources:
+      requests:
+        memory: "500Mi"
+      limits:
+        memory: "1Gi"
+    ports:
+    - name: metrics
+      containerPort: 6060
+  nodeSelector:
+    role: worker

@@ -1,0 +1,37 @@
+---
+alertmanager:
+  alertmanagerSpec:
+    nodeSelector:
+      role: "monitoring"
+prometheus:
+  prometheusSpec:
+    nodeSelector:
+      role: "monitoring"
+prometheusOperator:
+  nodeSelector:
+    role: "monitoring"
+  admissionWebhooks:
+    deployment:
+      nodeSelector:
+        role: "monitoring"
+    patch:
+      nodeSelector:
+        role: "monitoring"
+kube-state-metrics:
+  nodeSelector:
+    role: "monitoring"
+grafana:
+  nodeSelector:
+    role: "monitoring"
+thanosRuler:
+  thanosRulerSpec:
+    nodeSelector:
+      role: "monitoring"
+prometheus-node-exporter:
+  prometheus:
+    monitor:
+      enabled: true
+      relabelings:
+      # by default instance is IP:port
+      - sourceLabels: [__meta_kubernetes_pod_node_name]
+        targetLabel: instance
