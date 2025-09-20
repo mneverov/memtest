@@ -27,6 +27,7 @@ kubectl create -f env/pod.yaml
 kubectl create -f env/pm.yaml
 
 echo "grafana"
+echo "admin:prom-operator"
 kubectl wait --for=condition=Ready -n monitoring pod -l 'app.kubernetes.io/name=grafana' --timeout=10s
 GRAFANA_PF=("kubectl port-forward -n monitoring deployment/kube-prometheus-stack-grafana 3000")
 ${GRAFANA_PF} & #> /dev/null

@@ -1,3 +1,3 @@
 module github.com/mneverov/memtest
 
-go 1.24
+go 1.25
