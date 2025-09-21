@@ -1,5 +1,8 @@
 build:
-	go build -o bin/memtest .
+	GOEXPERIMENT=greenteagc go1.25rc1 build -o bin/memtest .
+
+buildnogreantea:
+	GOEXPERIMENT=nogreenteagc go1.25rc1 build -o bin/memtest .
 
 run:
 	go run main.go
