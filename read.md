@@ -4,7 +4,7 @@
 
 ```sh
 make build
-make buildnogreantea
+make buildnogreentea
 ```
 
 ```sh
